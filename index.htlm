@@ -34,7 +34,7 @@ mark{background:#22c55e;color:#031108;border-radius:3px;padding:0 2px}
   <div class="glass rounded-2xl p-8 max-w-md w-full shadow-neon">
     <h3 class="text-xl font-extrabold text-white mb-2">Rejoindre le serveur</h3>
     <p class="text-slate-400 text-sm mb-5">Ouvrez FiveM, appuyez sur <kbd class="px-2 py-0.5 bg-black border border-brand-border rounded text-brand-neon">F8</kbd> et collez la commande :</p>
-    <div class="bg-black border border-brand-border rounded-xl p-4 font-mono text-brand-neon text-sm mb-5 break-all">connect connect.wise-legacy.fr</div>
+    <div class="bg-black border border-brand-border rounded-xl p-4 font-mono text-brand-neon text-sm mb-5 break-all">connect connect.</div>
     <div class="flex gap-3">
       <button onclick="copyIP()" class="flex-1 py-3 rounded-xl bg-brand-green text-black font-bold text-sm hover:brightness-110">Copier l'IP</button>
       <button onclick="closeModal()" class="flex-1 py-3 rounded-xl border border-brand-border text-slate-300 font-bold text-sm hover:border-brand-green">Fermer</button>
@@ -89,12 +89,12 @@ mark{background:#22c55e;color:#031108;border-radius:3px;padding:0 2px}
       Un serveur Roleplay fluide, optimisé et ouvert à tous. Économie réaliste, scripts exclusifs et factions actives vous attendent.
     </p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-      <a id="btn-discord-hero" href="#" target="_blank" rel="noopener" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-green hover:brightness-110 text-black font-bold text-sm flex items-center justify-center gap-3 shadow-neon transition-all hover:-translate-y-1">
+      <a id="btn-discord-hero" href="https://discord.gg/u8HeQZvcst" target="_blank" rel="noopener" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-green hover:brightness-110 text-black font-bold text-sm flex items-center justify-center gap-3 shadow-neon transition-all hover:-translate-y-1">
         <i class="fa-brands fa-discord text-xl"></i> Rejoindre le Discord
       </a>
       <button onclick="copyIP()" class="w-full sm:w-auto px-8 py-4 rounded-xl glass hover:border-brand-green text-white font-bold text-sm flex items-center justify-center gap-3 transition-all hover:-translate-y-1">
         <i class="fa-solid fa-server text-brand-green text-lg"></i>
-        <span>Copier l'IP : <strong class="text-brand-neon font-mono ml-1">connect.wise-legacy.fr</strong></span>
+        <span>Copier l'IP : <strong class="text-brand-neon font-mono ml-1">connect.</strong></span>
       </button>
     </div>
     <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -149,7 +149,7 @@ mark{background:#22c55e;color:#031108;border-radius:3px;padding:0 2px}
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">1</div><h3 class="text-lg font-bold text-white mb-2">Lancer FiveM</h3><p class="text-slate-400 text-xs leading-relaxed">Téléchargez FiveM sur fivem.net, installez-le et lancez le jeu avec une copie légitime de GTA V.</p></div>
-      <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">2</div><h3 class="text-lg font-bold text-white mb-2">Se connecter</h3><p class="text-slate-400 text-xs leading-relaxed">Appuyez sur F8, tapez <span class="font-mono text-brand-neon">connect connect.wise-legacy.fr</span> puis validez.</p></div>
+      <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">2</div><h3 class="text-lg font-bold text-white mb-2">Se connecter</h3><p class="text-slate-400 text-xs leading-relaxed">Appuyez sur F8, tapez <span class="font-mono text-brand-neon">connect connect.</span> puis validez.</p></div>
       <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">3</div><h3 class="text-lg font-bold text-white mb-2">Créer son personnage</h3><p class="text-slate-400 text-xs leading-relaxed">Rejoignez le Discord, lisez le règlement, créez votre identité et commencez votre histoire.</p></div>
     </div>
   </div>
@@ -293,7 +293,7 @@ function showToast(msg){
   setTimeout(() => t.classList.add('translate-y-20','opacity-0'), 2500);
 }
 function copyIP(){
-  const ip = 'connect.wise-legacy.fr';
+  const ip = 'connect.';
   (navigator.clipboard ? navigator.clipboard.writeText(ip) : Promise.reject())
     .then(() => showToast('IP copiée dans le presse-papiers'))
     .catch(() => showToast('IP : ' + ip));
