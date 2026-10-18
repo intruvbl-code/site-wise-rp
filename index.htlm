@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wise Legacy FA - Serveur FiveM Roleplay Free Access</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { green: '#22c55e', neon: '#4ade80', deep: '#052e16', dark: '#050805', card: '#0b120d', border: '#14301c' } }, boxShadow: { neon: '0 0 25px rgba(34,197,94,.35)' } } } }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Inter',sans-serif;background:#050805;color:#e2e8f0}
+.glass{background:rgba(11,18,13,.8);backdrop-filter:blur(12px);border:1px solid rgba(34,197,94,.14)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#050805}
+::-webkit-scrollbar-thumb{background:#14301c;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#22c55e}
+.grid-bg{background-image:linear-gradient(rgba(34,197,94,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.06) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.rule-tab.active{background:#22c55e;color:#031108;box-shadow:0 0 25px rgba(34,197,94,.35)}
+mark{background:#22c55e;color:#031108;border-radius:3px;padding:0 2px}
+</style>
+</head>
+<body class="antialiased selection:bg-brand-green selection:text-black">
+
+<div id="toast" class="fixed bottom-6 right-6 z-50 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass px-5 py-4 rounded-xl flex items-center gap-3 shadow-neon">
+  <i class="fa-solid fa-circle-check text-brand-neon text-xl"></i>
+  <span id="toast-message" class="font-medium text-sm"></span>
+</div>
+
+<!-- Modal connexion -->
+<div id="modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+  <div class="glass rounded-2xl p-8 max-w-md w-full shadow-neon">
+    <h3 class="text-xl font-extrabold text-white mb-2">Rejoindre le serveur</h3>
+    <p class="text-slate-400 text-sm mb-5">Ouvrez FiveM, appuyez sur <kbd class="px-2 py-0.5 bg-black border border-brand-border rounded text-brand-neon">F8</kbd> et collez la commande :</p>
+    <div class="bg-black border border-brand-border rounded-xl p-4 font-mono text-brand-neon text-sm mb-5 break-all">connect connect.wise-legacy.fr</div>
+    <div class="flex gap-3">
+      <button onclick="copyIP()" class="flex-1 py-3 rounded-xl bg-brand-green text-black font-bold text-sm hover:brightness-110">Copier l'IP</button>
+      <button onclick="closeModal()" class="flex-1 py-3 rounded-xl border border-brand-border text-slate-300 font-bold text-sm hover:border-brand-green">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<header class="fixed top-0 inset-x-0 z-40 glass border-b border-brand-green/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="#accueil" class="flex items-center gap-3 group">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-green to-brand-neon p-0.5 shadow-neon group-hover:scale-105 transition-transform">
+        <div class="w-full h-full bg-black rounded-[10px] flex items-center justify-center"><i class="fa-solid fa-crown text-brand-neon text-lg"></i></div>
+      </div>
+      <div>
+        <span class="text-xl font-black tracking-wider text-white block">WISE LEGACY</span>
+        <span class="text-[10px] font-bold text-brand-green uppercase tracking-widest block -mt-1">Free Access RP</span>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+      <a href="#accueil" class="text-slate-300 hover:text-brand-neon transition-colors">Accueil</a>
+      <a href="#features" class="text-slate-300 hover:text-brand-neon transition-colors">Pourquoi nous ?</a>
+      <a href="#reglement" class="text-slate-300 hover:text-brand-neon transition-colors">Règlement</a>
+      <a href="#connexion" class="text-slate-300 hover:text-brand-neon transition-colors">Rejoindre</a>
+    </nav>
+    <div class="hidden sm:block">
+      <button onclick="openConnectModal()" class="px-5 py-2.5 rounded-xl bg-brand-green text-black text-xs font-extrabold uppercase tracking-wider shadow-neon hover:brightness-110 transition-all">Jouer</button>
+    </div>
+    <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white text-2xl" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden glass border-t border-brand-green/10 px-4 pt-3 pb-6 space-y-3">
+    <a href="#accueil" class="block py-2 text-slate-300 hover:text-brand-neon font-medium">Accueil</a>
+    <a href="#features" class="block py-2 text-slate-300 hover:text-brand-neon font-medium">Pourquoi nous ?</a>
+    <a href="#reglement" class="block py-2 text-slate-300 hover:text-brand-neon font-medium">Règlement</a>
+    <a href="#connexion" class="block py-2 text-slate-300 hover:text-brand-neon font-medium">Rejoindre</a>
+    <button onclick="openConnectModal()" class="w-full px-4 py-3 rounded-lg bg-brand-green text-black text-sm font-bold">Jouer maintenant</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="accueil" class="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 grid-bg pointer-events-none"></div>
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-green/15 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-brand-neon text-xs font-bold uppercase tracking-widest mb-6 shadow-neon">
+      <i class="fa-solid fa-unlock"></i> Free Access / Sans whitelist
+    </div>
+    <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white mb-6 leading-tight">
+      ÉCRIVEZ VOTRE LÉGENDE SUR <br class="hidden sm:inline">
+      <span class="bg-gradient-to-r from-brand-green via-brand-neon to-white bg-clip-text text-transparent">WISE LEGACY FA</span>
+    </h1>
+    <p class="text-slate-400 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      Un serveur Roleplay fluide, optimisé et ouvert à tous. Économie réaliste, scripts exclusifs et factions actives vous attendent.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+      <a id="btn-discord-hero" href="#" target="_blank" rel="noopener" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-green hover:brightness-110 text-black font-bold text-sm flex items-center justify-center gap-3 shadow-neon transition-all hover:-translate-y-1">
+        <i class="fa-brands fa-discord text-xl"></i> Rejoindre le Discord
+      </a>
+      <button onclick="copyIP()" class="w-full sm:w-auto px-8 py-4 rounded-xl glass hover:border-brand-green text-white font-bold text-sm flex items-center justify-center gap-3 transition-all hover:-translate-y-1">
+        <i class="fa-solid fa-server text-brand-green text-lg"></i>
+        <span>Copier l'IP : <strong class="text-brand-neon font-mono ml-1">connect.wise-legacy.fr</strong></span>
+      </button>
+    </div>
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+      <div class="glass p-5 rounded-2xl"><i class="fa-solid fa-gauge-high text-brand-green text-2xl mb-2"></i><div class="text-2xl font-extrabold text-white">60 FPS+</div><div class="text-xs text-slate-400">Optimisation poussée</div></div>
+      <div class="glass p-5 rounded-2xl"><i class="fa-solid fa-sack-dollar text-brand-green text-2xl mb-2"></i><div class="text-2xl font-extrabold text-white">Réaliste</div><div class="text-xs text-slate-400">Économie équilibrée</div></div>
+      <div class="glass p-5 rounded-2xl"><i class="fa-solid fa-users-gear text-brand-green text-2xl mb-2"></i><div class="text-2xl font-extrabold text-white">24/7</div><div class="text-xs text-slate-400">Staff réactif</div></div>
+      <div class="glass p-5 rounded-2xl"><i class="fa-solid fa-shield-halved text-brand-green text-2xl mb-2"></i><div class="text-2xl font-extrabold text-white">Free Access</div><div class="text-xs text-slate-400">Accès immédiat</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-24 border-t border-brand-green/10 bg-brand-deep/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-green mb-2">Expérience inégalée</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-white">Pourquoi choisir Wise Legacy FA ?</p>
+    </div>
+    <div id="features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+</section>
+
+<!-- Règlement -->
+<section id="reglement" class="py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-green mb-2">Charte du joueur</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Règlement officiel de la cité</p>
+      <p class="text-slate-400 text-sm">Nul n'est censé ignorer la loi. Lisez attentivement ces règles avant de vous connecter : se connecter vaut acceptation du règlement.</p>
+    </div>
+    <div class="max-w-3xl mx-auto mb-10 space-y-6">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+        <input type="text" id="rule-search" placeholder="Rechercher une règle ou un terme (ex : NLR, Fear RP, Safezone, PIT, otage)..." class="w-full pl-11 pr-4 py-3.5 rounded-xl glass focus:border-brand-green focus:outline-none text-sm text-white placeholder-slate-500">
+      </div>
+      <div class="flex flex-wrap justify-center gap-2" id="rule-tabs"></div>
+    </div>
+    <div id="rules-container" class="space-y-6 max-w-4xl mx-auto"></div>
+    <p id="no-result" class="hidden text-center text-slate-400 text-sm mt-8">Aucune règle ne correspond à votre recherche.</p>
+    <div class="max-w-4xl mx-auto mt-10 glass rounded-2xl p-6 border-l-4 border-l-brand-green text-sm text-slate-400">
+      <strong class="text-white">Important :</strong> le staff se réserve le droit de sanctionner toute situation non listée ici si elle nuit à la qualité du Roleplay. Le règlement peut évoluer : consultez régulièrement cette page et le salon #annonces du Discord.
+    </div>
+  </div>
+</section>
+
+<!-- Connexion -->
+<section id="connexion" class="py-24 border-t border-brand-green/10 bg-brand-deep/20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-green mb-2">Tutoriel express</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-white">Comment nous rejoindre en 3 étapes</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">1</div><h3 class="text-lg font-bold text-white mb-2">Lancer FiveM</h3><p class="text-slate-400 text-xs leading-relaxed">Téléchargez FiveM sur fivem.net, installez-le et lancez le jeu avec une copie légitime de GTA V.</p></div>
+      <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">2</div><h3 class="text-lg font-bold text-white mb-2">Se connecter</h3><p class="text-slate-400 text-xs leading-relaxed">Appuyez sur F8, tapez <span class="font-mono text-brand-neon">connect connect.wise-legacy.fr</span> puis validez.</p></div>
+      <div class="glass p-8 rounded-2xl text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-black font-black text-xl flex items-center justify-center mx-auto mb-6 shadow-neon">3</div><h3 class="text-lg font-bold text-white mb-2">Créer son personnage</h3><p class="text-slate-400 text-xs leading-relaxed">Rejoignez le Discord, lisez le règlement, créez votre identité et commencez votre histoire.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-10 border-t border-brand-green/10 text-center text-xs text-slate-500">
+  <p>© <span id="year"></span> Wise Legacy FA — Serveur FiveM Roleplay. Non affilié à Rockstar Games, Take-Two Interactive ou Cfx.re.</p>
+</footer>
+
+<script>
+const FEATURES = [
+  ['fa-city','Mappings exclusifs','Quartiers retravaillés, intérieurs personnalisés et points de rassemblement inédits pour une immersion totale.'],
+  ['fa-mask','Système illégal avancé','Drogues custom, territoires de gangs, braquages élaborés, revente d\'armes et système de réputation.'],
+  ['fa-building-shield','Factions légales actives','Rejoignez la LSPD, l\'EMS, le Gouvernement ou Weyland Mechanics avec tenues, véhicules et radios réalistes.'],
+  ['fa-car','Véhicules moddés','Un catalogue de véhicules réels et lore-friendly, réglés au niveau de la conduite et du son moteur.'],
+  ['fa-comments','Voice system (PMA-Voice)','Son cristallin, radios à fréquences chiffrées, effets d\'écho en intérieur et appels téléphoniques propres.'],
+  ['fa-headset','Staff à l\'écoute','Une équipe formée, impartiale et disponible 24/7 pour garantir un Roleplay propre et agréable.']
+];
+document.getElementById('features-grid').innerHTML = FEATURES.map(f => `
+  <div class="glass p-8 rounded-2xl hover:border-brand-green/60 hover:shadow-neon transition-all duration-300 group">
+    <div class="w-14 h-14 rounded-xl bg-brand-green/10 border border-brand-green/30 flex items-center justify-center text-brand-green text-2xl mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid ${f[0]}"></i></div>
+    <h3 class="text-xl font-bold text-white mb-3">${f[1]}</h3>
+    <p class="text-slate-400 text-sm leading-relaxed">${f[2]}</p>
+  </div>`).join('');
+
+// [numéro, titre, texte]
+const RULES = [
+ {id:'general', tab:'1. Général & HRP', icon:'fa-gavel', title:'1. Règles générales & comportement Hors Roleplay (HRP)', items:[
+  ['1.1','Respect et courtoisie','Tout propos raciste, homophobe, sexiste, haineux, discriminatoire ou insultant en HRP (chat, vocal, Discord) entraîne un bannissement définitif sans appel. Le harcèlement, les menaces réelles et le doxxing sont sanctionnés de la même façon.'],
+  ['1.2','Vocal et chat HRP','Le vocal doit être strictement RP en toute circonstance. Un problème en scène : terminez la scène jusqu\'au bout, puis ouvrez un ticket Discord avec une preuve vidéo (Medal, Streamable, ShadowPlay). Aucun règlement de compte en direct.'],
+  ['1.3','Troll, VDM et double compte','Tout comportement visant à nuire à l\'expérience des autres (troll, VDM, micro-earrape, spam) est sanctionné par un ban permanent. Les doubles comptes Steam/FiveM sont interdits.'],
+  ['1.4','Âge et identité du personnage','Votre personnage doit avoir un nom, un prénom, un âge et un historique crédibles. Les noms de célébrités, de personnages fictifs connus ou à connotation humoristique/offensante sont refusés.'],
+  ['1.5','Cheat, exploit et bug abuse','L\'utilisation de logiciel tiers, mod menu, injection ou macro est un ban définitif. Exploiter un bug (duplication d\'argent, d\'objets, sortie de map) sans le signaler au staff entraîne une sanction et la perte des gains.'],
+  ['1.6','Streamers et enregistrements','Le streamer est responsable de son live : le stream-sniping est interdit et un retard d\'au moins 2 minutes est conseillé. Le staff peut vous demander une preuve vidéo à tout moment.'],
+  ['1.7','Déconnexion en scène (Combat Log)','Se déconnecter pour fuir une scène, une arrestation ou une fouille est interdit. En cas de crash, prévenez le staff via ticket et reconnectez-vous dans les 10 minutes.'],
+  ['1.8','Publicité et contenu interdit','Toute publicité pour un autre serveur, tout contenu à caractère sexuel, pédopornographique, terroriste ou illégal entraîne un ban définitif et un signalement aux autorités si nécessaire.'],
+  ['1.9','Respect du staff','Les décisions du staff doivent être respectées en jeu. Toute contestation se fait par ticket, avec calme et preuves. Insulter ou menacer un membre du staff aggrave la sanction.']
+ ]},
+ {id:'lexique', tab:'2. Lexique RP', icon:'fa-book', title:'2. Lexique officiel Roleplay & concepts fondamentaux', items:[
+  ['2.1','Metagaming','Utiliser en jeu (IC) des informations obtenues HRP (Discord, stream, vocal, forum). Exemple : reconnaître un joueur masqué grâce à son pseudo ou à sa voix entendue en live.'],
+  ['2.2','Powergaming','Réaliser une action impossible dans la vraie vie ou forcer une scène sans laisser d\'option à l\'adversaire. Exemple : conduire une supersportive à 250 km/h hors-piste sans accident.'],
+  ['2.3','Fear RP (peur de sa vie)','Vous devez simuler la peur face à une menace directe. Exemple : braqué à bout portant, vous obéissez et levez les mains, sans tenter de sortir une arme.'],
+  ['2.4','Pain RP (douleur)','Simulez vocalement et physiquement la douleur après un accident, une chute ou une blessure par balle : boiter, ralentir, demander des soins.'],
+  ['2.5','NLR (New Life Rule)','Après un coma ou une mort clinique, vous oubliez la scène ayant causé votre mort et vos agresseurs. Vous ne pouvez pas retourner sur les lieux pendant 30 minutes ni vous venger.'],
+  ['2.6','Mass RP & PNJ','La ville compte des millions de civils (PNJ). Vous ne pouvez pas commettre de crimes flagrants en plein centre-ville en plein jour sans que cela ait de conséquences RP.'],
+  ['2.7','Hors-RP (HRP) et In Character (IC)','HRP désigne tout ce qui concerne le joueur réel, IC tout ce que vit le personnage. Ne mélangez jamais les deux : pas de « mon micro bug » ou « je dois partir manger » en vocal RP, utilisez /hrp avec modération.'],
+  ['2.8','Revenge Kill (RK)','Tuer ou agresser quelqu\'un pour se venger d\'une précédente mort est interdit. Après un NLR, vous n\'avez plus de souvenirs de la scène.'],
+  ['2.9','Value of Life (VOL)','Votre personnage tient à la vie. Face à une arme ou une supériorité numérique évidente, vous ne prenez pas de risques suicidaires. Les actions héroïques sans espoir de survie sont sanctionnées.'],
+  ['2.10','Cop Baiting / Provocation gratuite','Provoquer les forces de l\'ordre ou un groupe sans motif RP, dans le seul but de déclencher une scène, est interdit.'],
+  ['2.11','Force RP','Imposer une action à un joueur sans lui laisser la possibilité de réagir (/me abusif) est interdit. Chaque /me doit rester réalisable et laisser une marge de réponse.']
+ ]},
+ {id:'illegal', tab:'3. RP Illégal & Gangs', icon:'fa-skull', title:'3. RP illégal, braquages & guerres de gangs', items:[
+  ['3.1','Limites d\'effectifs en scène','Les scènes d\'affrontement illégal (fusillade, braquage de supérette, prise d\'otage) sont limitées à 6 personnes maximum par groupe sur zone.'],
+  ['3.2','Drive-by & PIT maneuver','Le drive-by n\'est autorisé qu\'à faible vitesse (moins de 40 km/h) et avec une arme de poing légère. Le PIT est interdit au-delà de 80 km/h sous peine de sanction pour VDM.'],
+  ['3.3','Braquages et prises d\'otages','Il est interdit de prendre en otage un EMS en service ou d\'utiliser un otage complice. Au moins 2 policiers LSPD doivent être en service pour déclencher un braquage de supérette.'],
+  ['3.4','Braquages de banque et bijouterie','Ces braquages exigent un minimum de 4 policiers en service, une préparation RP (repérage, plan) et une durée de scène raisonnable. Le délai entre deux braquages majeurs est de 2 heures.'],
+  ['3.5','Guerre de gangs','Une guerre doit avoir un motif RP valide et une annonce en ticket au staff. Elle ne peut pas être déclenchée sans scène préalable et se limite à des zones définies. Le staff peut y mettre fin en cas d\'abus.'],
+  ['3.6','Territoires et ventes illégales','Le contrôle d\'un territoire est validé par le staff. La vente de drogue se fait dans des zones attribuées, jamais devant un commissariat, un hôpital ou en safezone.'],
+  ['3.7','Armes et munitions','Le port d\'arme visible sans motif RP est une provocation. Les armes lourdes (fusil d\'assaut, mitraillette) ne sont autorisées que lors de braquages majeurs ou événements validés par le staff.'],
+  ['3.8','Kidnapping et séquestration','Un enlèvement nécessite un motif RP, une durée limitée à 20 minutes et une scène de négociation. Il est interdit de kidnapper un joueur sans interaction préalable ou un joueur vulnérable en début de session.'],
+  ['3.9','Vol de véhicule et recel','Le vol de véhicule est autorisé en RP, sauf véhicules de service (LSPD, EMS, taxi) et véhicules en safezone. Aucun vol sur un joueur en cours de conversation ou en train d\'être soigné.'],
+  ['3.10','Mort en braquage','Une mort pendant un braquage ou une fusillade entraîne un NLR complet. Aucun looting abusif : seuls les objets illégaux et l\'argent sale peuvent être pris.']
+ ]},
+ {id:'legal', tab:'4. RP Légal & Factions', icon:'fa-shield-cat', title:'4. RP légal, LSPD, EMS & entreprises', items:[
+  ['4.1','Protection des EMS / médecins','Les EMS sont neutres. Il est interdit de les agresser, de voler leur matériel, de les braquer ou de les tuer pendant ou après une intervention.'],
+  ['4.2','Corruption des factions légales','La corruption au sein de la LSPD ou du Gouvernement nécessite un dossier validé au préalable par le pôle Staff / Faction légale via ticket.'],
+  ['4.3','Usage de la force par la LSPD','La force doit être proportionnée : sommations, taser, puis arme létale uniquement en cas de menace directe. Un policier ne tire pas sur un suspect désarmé en fuite à pied.'],
+  ['4.4','Procédure d\'arrestation','Toute arrestation doit comporter la lecture des droits, une fouille RP et un PV. Une garde à vue ne dépasse pas 30 minutes de jeu, sauf cas validé par un supérieur.'],
+  ['4.5','Négociation et prises d\'otages','Lors d\'une prise d\'otage, la police doit ouvrir une négociation avant tout assaut. Le délai de réflexion ne peut pas être inférieur à 5 minutes de jeu.'],
+  ['4.6','EMS : prise en charge et réanimation','Un EMS soigne avec neutralité, quel que soit le camp du patient. L\'état de coma dure au minimum 5 minutes avant intervention ; abandonner un joueur sans le signaler au staff est sanctionné.'],
+  ['4.7','Entreprises et métiers','Les gérants doivent respecter les tarifs RP, garder des archives (factures, stocks) et rester actifs. Une entreprise inactive 15 jours est reprise par le staff.'],
+  ['4.8','Abus de pouvoir','Utiliser son grade, ses outils ou ses véhicules de fonction à des fins personnelles hors RP est sanctionné par un retrait de grade et peut mener à une exclusion de la faction.'],
+  ['4.9','Taxis, mécanos et civils','Un conducteur de taxi ou un mécano ne peut être braqué qu\'avec un motif RP clair. Le dépannage en pleine scène d\'action est interdit.']
+ ]},
+ {id:'zones', tab:'5. Zones & Safezones', icon:'fa-map-location-dot', title:'5. Zones protégées (safezones), zones rouges & véhicules', items:[
+  ['5.1','Liste des safezones','Agression, vol et meurtre sont interdits dans : le commissariat LSPD central, l\'Hôpital central (Pillbox), le concessionnaire et les garages publics, le spawn initial (place des Civils), les bureaux du Gouvernement.'],
+  ['5.2','Fuite en safezone','Se réfugier dans une safezone pendant une poursuite ou une scène d\'action est interdit (avertissement, puis ban en cas de récidive).'],
+  ['5.3','Zones rouges','Certaines zones (cartel, entrepôts, quartiers de gang) sont identifiées comme zones rouges où les affrontements sont autorisés. Y entrer implique d\'accepter le risque RP.'],
+  ['5.4','Camp de spawn / Spawnkill','Attendre ou tuer un joueur à son point d\'apparition (hôpital, garage, spawn) est du spawnkill et est sanctionné d\'un ban temporaire.'],
+  ['5.5','Véhicules et conduite','Le respect du code de la route est attendu. Rouler à contresens, sauter volontairement du haut d\'un immeuble ou rouler sur les piétons entraîne une sanction pour FailRP / VDM.'],
+  ['5.6','Stationnement et fourrière','Les véhicules abandonnés sur la voie publique partent en fourrière après 30 minutes. Bloquer volontairement un accès (hôpital, commissariat, garage) est interdit.'],
+  ['5.7','Événements staff','Lors d\'un événement officiel, les règles spécifiques annoncées par le staff priment sur le règlement habituel. Toute perturbation est sanctionnée.']
+ ]},
+ {id:'sanctions', tab:'6. Sanctions', icon:'fa-scale-balanced', title:'6. Sanctions & procédure de recours', items:[
+  ['6.1','Barème des sanctions','Rappel à l\'ordre, avertissement, jail HRP, ban temporaire (1 à 30 jours), ban définitif. La sanction dépend de la gravité, de la récidive et de l\'impact sur la scène.'],
+  ['6.2','Infractions à ban définitif','Cheat, propos haineux, menaces réelles, contenu illégal, contournement de ban, publicité et double compte volontaire sont sanctionnés d\'un ban définitif immédiat.'],
+  ['6.3','Procédure de recours','Pour contester une sanction : ouvrez un ticket « Recours » sous 7 jours, avec vos preuves et votre version des faits. Un autre membre du staff réexamine le dossier.'],
+  ['6.4','Preuves et plaintes','Toute plainte doit contenir : l\'identité des joueurs, la date et l\'heure, la raison et une vidéo claire. Sans preuve, le staff peut classer la plainte sans suite.'],
+  ['6.5','Bannissement et contournement','Contourner un ban (nouveau compte, VPN, prêt de compte) allonge la sanction et entraîne un ban définitif de tous les comptes liés.']
+ ]}
+];
+
+const tabsEl = document.getElementById('rule-tabs');
+const container = document.getElementById('rules-container');
+tabsEl.innerHTML = '<button data-tab="all" class="rule-tab active px-4 py-2 rounded-xl text-xs font-bold bg-brand-card border border-brand-border text-slate-400">Toutes les règles</button>' +
+  RULES.map(c => `<button data-tab="${c.id}" class="rule-tab px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-card border border-brand-border text-slate-400 hover:text-white">${c.tab}</button>`).join('');
+
+let activeTab = 'all';
+const esc = s => s.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+function hl(text, q){ const t = esc(text); if(!q) return t; const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi'); return t.replace(re,'<mark>$1</mark>'); }
+
+function render(){
+  const q = document.getElementById('rule-search').value.trim();
+  const ql = q.toLowerCase();
+  let total = 0;
+  container.innerHTML = RULES.filter(c => activeTab === 'all' || c.id === activeTab).map(c => {
+    const items = c.items.filter(i => !ql || (i[1] + ' ' + i[2]).toLowerCase().includes(ql));
+    if(!items.length) return '';
+    total += items.length;
+    return `<div class="glass p-6 sm:p-8 rounded-2xl space-y-4">
+      <div class="flex items-center gap-3 border-b border-brand-green/15 pb-4"><i class="fa-solid ${c.icon} text-brand-green text-xl"></i><h3 class="text-lg font-bold text-white">${c.title}</h3></div>
+      <div class="space-y-3 text-sm">${items.map(i => `<div class="bg-black/40 p-4 rounded-xl border border-brand-border"><h4 class="font-bold text-white mb-1"><span class="text-brand-green mr-2">${i[0]}</span>${hl(i[1], q)}</h4><p class="text-slate-400 leading-relaxed">${hl(i[2], q)}</p></div>`).join('')}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('no-result').classList.toggle('hidden', total > 0);
+}
+
+tabsEl.addEventListener('click', e => {
+  const b = e.target.closest('.rule-tab'); if(!b) return;
+  activeTab = b.dataset.tab;
+  tabsEl.querySelectorAll('.rule-tab').forEach(t => {
+    const on = t === b;
+    t.classList.toggle('active', on);
+    t.classList.toggle('bg-brand-card', !on);
+    t.classList.toggle('text-slate-400', !on);
+  });
+  render();
+});
+document.getElementById('rule-search').addEventListener('input', render);
+render();
+
+// Menu mobile
+document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+document.querySelectorAll('#mobile-menu a').forEach(a => a.onclick = () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// Toast + IP + modal
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-message').textContent = msg;
+  t.classList.remove('translate-y-20','opacity-0');
+  setTimeout(() => t.classList.add('translate-y-20','opacity-0'), 2500);
+}
+function copyIP(){
+  const ip = 'connect.wise-legacy.fr';
+  (navigator.clipboard ? navigator.clipboard.writeText(ip) : Promise.reject())
+    .then(() => showToast('IP copiée dans le presse-papiers'))
+    .catch(() => showToast('IP : ' + ip));
+}
+function openConnectModal(){ const m = document.getElementById('modal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+function closeModal(){ const m = document.getElementById('modal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+document.getElementById('modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
